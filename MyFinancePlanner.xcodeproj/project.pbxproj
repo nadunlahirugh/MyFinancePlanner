@@ -14,6 +14,8 @@
 		F140488F2ABF3578007155DB /* CreateExpenseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F140488E2ABF3578007155DB /* CreateExpenseView.swift */; };
 		F14048912ABF3635007155DB /* ExpenseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14048902ABF3635007155DB /* ExpenseViewModel.swift */; };
 		F14048932ABF527F007155DB /* DatePickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14048922ABF527F007155DB /* DatePickerViewModel.swift */; };
+		F166E5262AC346E0004960DD /* DropdownViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166E5252AC346E0004960DD /* DropdownViewModel.swift */; };
+		F166E52E2AC3DCBA004960DD /* DropdownOptionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F166E52D2AC3DCBA004960DD /* DropdownOptionModel.swift */; };
 		F18CCDA62AB2C13E00EC56B1 /* MyFinancePlannerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18CCDA52AB2C13E00EC56B1 /* MyFinancePlannerApp.swift */; };
 		F18CCDA82AB2C13E00EC56B1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18CCDA72AB2C13E00EC56B1 /* ContentView.swift */; };
 		F18CCDAA2AB2C13F00EC56B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F18CCDA92AB2C13F00EC56B1 /* Assets.xcassets */; };
@@ -48,6 +50,8 @@
 		F140488E2ABF3578007155DB /* CreateExpenseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateExpenseView.swift; sourceTree = "<group>"; };
 		F14048902ABF3635007155DB /* ExpenseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseViewModel.swift; sourceTree = "<group>"; };
 		F14048922ABF527F007155DB /* DatePickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerViewModel.swift; sourceTree = "<group>"; };
+		F166E5252AC346E0004960DD /* DropdownViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownViewModel.swift; sourceTree = "<group>"; };
+		F166E52D2AC3DCBA004960DD /* DropdownOptionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownOptionModel.swift; sourceTree = "<group>"; };
 		F18CCDA22AB2C13E00EC56B1 /* MyFinancePlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyFinancePlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F18CCDA52AB2C13E00EC56B1 /* MyFinancePlannerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFinancePlannerApp.swift; sourceTree = "<group>"; };
 		F18CCDA72AB2C13E00EC56B1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,6 +95,7 @@
 				F14048852ABEAB82007155DB /* LoginViewModel.swift */,
 				F14048902ABF3635007155DB /* ExpenseViewModel.swift */,
 				F14048922ABF527F007155DB /* DatePickerViewModel.swift */,
+				F166E5252AC346E0004960DD /* DropdownViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -104,6 +109,14 @@
 				F140488E2ABF3578007155DB /* CreateExpenseView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		F166E5292AC3DBB6004960DD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F166E52D2AC3DCBA004960DD /* DropdownOptionModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		F18CCD992AB2C13E00EC56B1 = {
@@ -129,6 +142,7 @@
 		F18CCDA42AB2C13E00EC56B1 /* MyFinancePlanner */ = {
 			isa = PBXGroup;
 			children = (
+				F166E5292AC3DBB6004960DD /* Model */,
 				F14048872ABEACD7007155DB /* Views */,
 				F14048822ABEAB02007155DB /* ViewModel */,
 				F18CCDA52AB2C13E00EC56B1 /* MyFinancePlannerApp.swift */,
@@ -298,11 +312,13 @@
 				F18CCDA82AB2C13E00EC56B1 /* ContentView.swift in Sources */,
 				F140488F2ABF3578007155DB /* CreateExpenseView.swift in Sources */,
 				F18CCDA62AB2C13E00EC56B1 /* MyFinancePlannerApp.swift in Sources */,
+				F166E52E2AC3DCBA004960DD /* DropdownOptionModel.swift in Sources */,
 				F14048892ABEACFF007155DB /* LoginView.swift in Sources */,
 				F14048862ABEAB82007155DB /* LoginViewModel.swift in Sources */,
 				F14048912ABF3635007155DB /* ExpenseViewModel.swift in Sources */,
 				F140488D2ABEDA5B007155DB /* TabView.swift in Sources */,
 				F140488B2ABECB30007155DB /* SignupView.swift in Sources */,
+				F166E5262AC346E0004960DD /* DropdownViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
