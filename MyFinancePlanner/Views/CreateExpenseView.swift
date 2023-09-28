@@ -55,15 +55,17 @@ struct CreateExpenseView: View {
                                          Image(systemName: "arrowtriangle.down.fill")
                                              .padding(.trailing, 10)
                                      }
-                                 )
+                                 ) .sheet(isPresented: $isCategoryModalVisible) {
+                                     OptionModal(viewModel: dropdownView, isCategoryModalVisible: $isCategoryModalVisible).frame(maxWidth: .infinity, maxHeight: .infinity)
+                                    }
                                  .onTapGesture {
                                      isCategoryModalVisible.toggle()
                                  }
                                  
 
-                             if isCategoryModalVisible {
-                                 OptionModal(viewModel: dropdownView, isCategoryModalVisible: $isCategoryModalVisible)
-                             }
+//                             if isCategoryModalVisible {
+//                                 OptionModal(viewModel: dropdownView, isCategoryModalVisible: $isCategoryModalVisible)
+//                             }
                          }
                            
                     VStack {
@@ -90,6 +92,8 @@ struct CreateExpenseView: View {
                     .overlay {
                         Text("Date: \(expencesVM.date)")
                             .foregroundColor(.blue).padding(.leading)
+                        
+                        
                                        .sheet(isPresented: $isModalVisible) {
                                         ModalView(
                                             isModalVisible: $isModalVisible,
@@ -97,8 +101,8 @@ struct CreateExpenseView: View {
                                             modelExpencesVM: self.expencesVM
                                             
                                             
-                                        )
-                                    }
+                                        ).frame(maxWidth: .infinity, maxHeight: .infinity)
+                                       }
                     }.onTapGesture {
                         isModalVisible.toggle()
                     }
@@ -158,22 +162,29 @@ struct CreateExpenseView: View {
         var modelExpencesVM: ExpenseViewModel
         
         var body: some View {
-            
-            
-            VStack {
-                DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                    .datePickerStyle(GraphicalDatePickerStyle())
-                    .labelsHidden().onChange(of: selectedDate) { newValue in
-                        modelExpencesVM.date = formatDate(date: newValue)
-                    }
+            GeometryReader { geo in
                 
-                Button("Close Modal") {
-                    // Call the closure to set the selected date before closing the modal
-                    //                       setDate(selectedDate)
-                    isModalVisible.toggle()
-                }
-                .padding()
+                VStack {
+                    DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(GraphicalDatePickerStyle())
+                        .labelsHidden().onChange(of: selectedDate) { newValue in
+                            modelExpencesVM.date = formatDate(date: newValue)
+                        }
+                    
+                    Button("Close Modal") {
+                        // Call the closure to set the selected date before closing the modal
+                        //                       setDate(selectedDate)
+                        isModalVisible.toggle()
+                    }
+                    .padding()
+                } .frame(width: geo.size.width * 0.8, height: geo.size.height * 0.6) // Adjust size as needed
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .shadow(radius: 10)
+                    .position(x: geo.size.width / 2, y: geo.size.height / 2)
             }
+                
+          
         }
         
         func formatDate(date: Date) -> String {
@@ -189,23 +200,32 @@ struct CreateExpenseView: View {
 
         var body: some View {
             
-            
-            VStack {
-                ForEach(viewModel.options) { option in
-                           Button(action: {
-                               viewModel.selectedOption = option
-                               isCategoryModalVisible.toggle()
-                           }) {
-                               Text(option.name)
-                                   .frame(width: 500, height: 40)
-                                   .background(Color.white)
-                                   
-                           }
-                       }
-                   }
-                   .frame(maxHeight: 150)
-                   .background(Color.white)
-                   .padding()
+            GeometryReader { geo in
+                
+                VStack {
+                    ForEach(viewModel.options) { option in
+                        Button(action: {
+                            viewModel.selectedOption = option
+                            isCategoryModalVisible.toggle()
+                        }) {
+                            Text(option.name)
+                                .frame(width: geo.size.width - 150, height: 40) .font(.system(size: 18)) // Set a custom font size
+                                .foregroundColor(Color.black)
+                                .background(Color.white).cornerRadius(10)
+                            
+                        }
+                    }.border(Color.gray).cornerRadius(10)
+                    
+                    Spacer()
+                }
+                
+                .padding().frame(width: geo.size.width * 0.8, height: geo.size.height * 0.6) // Adjust size as needed
+                .background(Color.white)
+                .cornerRadius(10)
+                .shadow(radius: 10)
+                .position(x: geo.size.width / 2, y: geo.size.height / 2)
+                
+            }
         }
     }
     
