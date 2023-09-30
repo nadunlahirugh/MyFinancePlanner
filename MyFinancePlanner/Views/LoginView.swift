@@ -20,48 +20,41 @@ struct LoginView: View {
                     
                             Image("signIn")
                                 .resizable().aspectRatio(contentMode: .fit)
-                                .frame(width: 150)
+                                .frame(width: 100)
                         }.padding()
                     
                 
                 
-                VStack(spacing : 20){
+                VStack{
                     
                     VStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(Color("TextColour"))
-                            .frame(height: 50)
-                            .overlay {
-                                TextField("Email", text: $loginVM.email)
-                                    .padding(.leading, 10)
-                            }
+
+
+                        TextField("Email", text: $loginVM.email)
+                            .frame(height: 40)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding([.horizontal], 10)
+                            .cornerRadius(16)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            .padding([.horizontal], 10).background(Color("TextColour")).border(Color("TextColour"))
                     }
-                    .padding(.horizontal , 20)
+                    
                     
                     VStack{
-                        RoundedRectangle(cornerRadius: 10)
-                            .foregroundColor(Color("TestColour"))
-                            .frame(height: 50)
-                            .overlay {
-                                SecureField("Password", text: $loginVM.password)
-                                    .padding(.leading, 10)
-                            }
-                    }
-                    .padding(.horizontal , 20)
+                    
+                        
+                        SecureField("Password", text: $loginVM.password)
+                            .frame(height: 40)
+                            .textFieldStyle(PlainTextFieldStyle())
+                            .padding([.horizontal], 10)
+                            .cornerRadius(16)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                            .padding([.horizontal], 10).background(Color("TextColour")).border(Color("TextColour"))
+                    }.padding([.vertical], 10)
                     
                     
-//                    Button {
-//
-//                    } label: {
-//
-//                        ZStack {
-//                            LinearGradient(colors: [Color("GradiantStart"), Color("GradiantEnd")], startPoint: .topLeading, endPoint: .bottomTrailing).ignoresSafeArea(edges : .top).clipShape(RoundedRectangle(cornerRadius: 10))
-//                                .frame(height: 50)
-//                            Text("Sign In")
-//                                .foregroundColor(.white)
-//                        }.padding(.horizontal , 20)
-//
-//                    }
+                    
+
                     
                     Button(action: {
                               // Action to perform when the button is tapped
@@ -77,13 +70,28 @@ struct LoginView: View {
                     
                 }.padding()
                 
+                VStack{
+                    HStack{
+                        Text("Don’t have an account ?").alignmentGuide(.leading) { d in
+                            d[.leading]
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading).padding()
+                    
+                        
+                      
+                    }
+                    HStack{
+                      
+                    }
+                }
+                
                 
                 Spacer()
-            }
+            }.padding(.top,75)
             
+          
             
-            
-        }
+       }.background(Color("bgcolour"))
     }
 }
 

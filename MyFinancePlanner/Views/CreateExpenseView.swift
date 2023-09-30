@@ -9,39 +9,53 @@ import SwiftUI
 
 struct CreateExpenseView: View {
     
-    @ObservedObject var expencesVM: ExpenseViewModel
-    @ObservedObject var dropdownView: DropdownViewModel
-    //       let initializedValue: String
-  
-    //       @State private var selectedDate = Date()
-    @State private var selectedDate: Date
     
-    let dateFormatter = DateFormatter()
+    @EnvironmentObject var datePickerViewModel : DatePickerViewModel
+    @EnvironmentObject var expencesVM : ExpenseViewModel
+    @EnvironmentObject var dropdownViewModel : DropdownViewModel
+    @State var showDatePicker: Bool = false
+    @State var showCategoryDropdown : Bool = false
+    @State var showPaymentTypeDropdown: Bool = false
     
-    @State private var isModalVisible = false
-    @State private var isCategoryModalVisible = false
+ 
  
     
     
-    init(expencesVM: ExpenseViewModel, dropdownView: DropdownViewModel) {
-        self.expencesVM = expencesVM
-        self.dropdownView = dropdownView
-         // Initialize your options array with appropriate values
-        self._selectedDate = State(initialValue: dateFormatter.date(from: expencesVM.date) ?? Date())
-        self._isModalVisible = State(initialValue: false)
-        self._isCategoryModalVisible = State(initialValue: false)
-        
-      }
-    
-  var body: some View {
+var body: some View {
         
         
         
         ZStack {
             
+            VStack{
+                NavigationView {
+                            Text("")
+                                .navigationBarTitle("DASHBOARD", displayMode: .inline)
+                                .navigationBarItems(
+                                    leading: HStack {
+                                        Button(action: {
+                                            // Handle the action for the left button here
+                                        }) {
+                                            Image(systemName: "arrow.left.circle.fill")
+                                                .imageScale(.large)
+                                        }
+                                    },
+                                    trailing: HStack {
+                                        Button(action: {
+                                            // Handle the action for the right button here
+                                        }) {
+                                            Image(systemName: "gearshape.fill")
+                                                .imageScale(.large)
+                                        }
+                                    }
+                                )
+                        }
+            }
+            
             
 //            dropdownList
             VStack{
+                Text("Payment Type")
                 HStack {
                     VStack {
                              RoundedRectangle(cornerRadius: 10)
@@ -49,34 +63,104 @@ struct CreateExpenseView: View {
                             .frame(height: 50)
                                  .overlay(
                                      HStack {
-                                         Text(dropdownView.selectedOption?.name ?? "Select an option")
+                                         Text(self.dropdownViewModel.paymentOption?.name
+                                            
+                                            
+                                      ?? "Select Payment Option")
                                              .padding(.leading, 10)
                                          Spacer()
                                          Image(systemName: "arrowtriangle.down.fill")
                                              .padding(.trailing, 10)
                                      }
-                                 ) .sheet(isPresented: $isCategoryModalVisible) {
-                                     OptionModal(viewModel: dropdownView, isCategoryModalVisible: $isCategoryModalVisible).frame(maxWidth: .infinity, maxHeight: .infinity)
-                                    }
+                                 )
+                        
+                                 .sheet(isPresented: $showPaymentTypeDropdown) {
+                                             VStack {
+
+                    createExpensePaymentTypeModel(
+                                showPaymentTypeDropdown: $showPaymentTypeDropdown
+                                                 
+
+                                                     
+                                                 )   .presentationDetents([.height(150), .fraction(20), .medium, .large])
+                                                 
+                                             }
+                                             .background(Color.gray40)
+                                             
+                                             
+                                         }
+                                         .ignoresSafeArea()
                                  .onTapGesture {
-                                     isCategoryModalVisible.toggle()
+                                     showPaymentTypeDropdown.toggle()
                                  }
                                  
 
-//                             if isCategoryModalVisible {
-//                                 OptionModal(viewModel: dropdownView, isCategoryModalVisible: $isCategoryModalVisible)
+
 //                             }
                          }
                            
-                    VStack {
-                            
-                             IconButton(systemImageName: "star.fill") {
-                                 // Action to perform when the button is tapped
-                                 print("Button tapped!")
-                             }
-                         }
+
                        }
-            }
+                
+                Spacer()
+            }.padding(.top,20).padding()
+            
+            
+            //            dropdownList
+                        VStack{
+                            Text("Category")
+                            HStack {
+                                VStack {
+                                         RoundedRectangle(cornerRadius: 10)
+                                        .foregroundColor(Color("TextColour"))
+                                        .frame(height: 50)
+                                             .overlay(
+                                                 HStack {
+                                                     Text(dropdownViewModel.categorydOption?.name
+                                                        
+                                                        
+                              ?? "Select Category")
+                                                         .padding(.leading, 10)
+                                                     Spacer()
+                                                     Image(systemName: "arrowtriangle.down.fill")
+                                                         .padding(.trailing, 10)
+                                                 }
+                                             )
+                                    
+                                             .sheet(isPresented: $showCategoryDropdown) {
+                                                 VStack {
+                                                     
+                                                     
+                                                     createExpenseCategoryModel(
+                                                        showCategoryDropdown: $showCategoryDropdown
+                                                        
+                                                        
+                                                        
+                                                     )   .presentationDetents([.height(500)])}
+                                                     
+                                                     
+                                                     
+                                                     
+                                                 
+                                                         .background(Color.gray40)
+                                                         
+                                                         
+                                                     }
+                                                     .ignoresSafeArea()
+                                             .onTapGesture {
+                                                 showCategoryDropdown.toggle()
+                                             }
+                                             
+
+
+            //                             }
+                                     }
+                                       
+
+                                   }
+                            
+                            Spacer()
+                        }.padding(.top,120).padding()
        
             
           
@@ -84,38 +168,48 @@ struct CreateExpenseView: View {
 //            date
             VStack {
                 Text("Select Date")
-                
-              
+
+
                 RoundedRectangle(cornerRadius: 10)
                     .foregroundColor(Color("TextColour"))
                     .frame(height: 50)
                     .overlay {
-                        Text("Date: \(expencesVM.date)")
-                            .foregroundColor(.blue).padding(.leading)
                         
+                        Text("Date: \(datePickerViewModel.selectedDate)")
+                            .foregroundColor(.black)
+                  
                         
-                                       .sheet(isPresented: $isModalVisible) {
-                                        ModalView(
-                                            isModalVisible: $isModalVisible,
-                                            selectedDate: $selectedDate,
-                                            modelExpencesVM: self.expencesVM
-                                            
-                                            
-                                        ).frame(maxWidth: .infinity, maxHeight: .infinity)
-                                       }
+                    .sheet(isPresented: $showDatePicker) {
+                                VStack {
+
+                                    DatePickerViewInCreateExpence(
+                                        showDatePicker: $showDatePicker
+                                    
+
+                                        
+                                    )   .presentationDetents([.height(400), .fraction(20), .medium, .large])
+                                    
+                                }
+                                .background(Color.gray40)
+                                
+                                
+                            }
+                            .ignoresSafeArea()
                     }.onTapGesture {
-                        isModalVisible.toggle()
+                        showDatePicker.toggle()
                     }
                 Spacer()
-            }.padding(.top,20)
+            }.padding(.top,220).padding()
             
+            
+          
             
             
 //           amount
-            VStack(){
+            VStack{
                 Text("Select Amount")
                 
-                TextField("Amount", text: $expencesVM.amount)
+                TextField("Amount", text: $expencesVM.amountString)
                     .frame(height: 50)
                     .textFieldStyle(PlainTextFieldStyle())
                     .padding([.horizontal], 4)
@@ -134,13 +228,13 @@ struct CreateExpenseView: View {
 //                    }
                 
                 Spacer()
-            }
-            .padding(.top , 120)
+            }.padding(.top,320).padding()
+            
             
             VStack(){
                 Text("Select description")
                 
-                TextField("description", text: $expencesVM.amount).lineLimit(3, reservesSpace: true)
+                TextField("description", text: $expencesVM.description).lineLimit(3, reservesSpace: true)
                     .frame(height: 80)
                     .textFieldStyle(PlainTextFieldStyle())
                     .padding([.horizontal], 1)
@@ -150,67 +244,102 @@ struct CreateExpenseView: View {
                 
               
             Spacer()
-            }
-            .padding(.top , 220)
+            }.padding(.top,420).padding()
+            
+            VStack{
+                Button(action: {
+                          // Action to perform when the button is tapped
+                    expencesVM.addExpences(){
+                        
+                        result in
+                        
+                        switch result {
+                        case .success(_):
+                            
+                           print("suceess")
+                        
+                        case .failure(let error):
+                            expencesVM.errorMessage = error.errorMessage
+                        }
+                        
+                    }
+                      }) {
+                          Text("Sign In")
+                              .font(.headline)
+                              .padding()
+                              .background(Color.orange) // Set the button's background color
+                              .foregroundColor(.white) // Set the text color
+                              .cornerRadius(10) // Round the button's corners
+                      }
+                
+                if let errorMessage = expencesVM.errorMessage{
+                       Text(errorMessage)
+                }
+            }.padding(.top,450)
+            
             
         }
     }
     
-    struct ModalView: View {
-        @Binding var isModalVisible: Bool
-        @Binding var selectedDate: Date
-        var modelExpencesVM: ExpenseViewModel
+    struct DatePickerViewInCreateExpence: View {
+        @Binding var showDatePicker: Bool
+        @EnvironmentObject var expencesVM : ExpenseViewModel
+        @EnvironmentObject var datePickerViewModel: DatePickerViewModel
         
         var body: some View {
-            GeometryReader { geo in
-                
-                VStack {
-                    DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                        .datePickerStyle(GraphicalDatePickerStyle())
-                        .labelsHidden().onChange(of: selectedDate) { newValue in
-                            modelExpencesVM.date = formatDate(date: newValue)
-                        }
-                    
-                    Button("Close Modal") {
-                        // Call the closure to set the selected date before closing the modal
-                        //                       setDate(selectedDate)
-                        isModalVisible.toggle()
-                    }
-                    .padding()
-                } .frame(width: geo.size.width * 0.8, height: geo.size.height * 0.6) // Adjust size as needed
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 10)
-                    .position(x: geo.size.width / 2, y: geo.size.height / 2)
-            }
+            //        GeometryReader { geo in
+                        
+                        VStack {
+                            DatePicker("", selection: $datePickerViewModel.nowDate, displayedComponents: .date)
+                                .datePickerStyle(GraphicalDatePickerStyle())
+                                .labelsHidden().onChange(of: datePickerViewModel.nowDate) { newValue in
+                                    datePickerViewModel.selectToString(date: datePickerViewModel.nowDate)
+                                    
+                                    expencesVM.date = datePickerViewModel.selectedDate
+                                    showDatePicker.toggle()
+                                }
+                            
+            //                Button("Close Modal") {
+            //                    // Call the closure to set the selected date before closing the modal
+            //                    //                       setDate(selectedDate)
+            //                    isModalVisible.toggle()
+            //                }
+            //                .padding()
+                        }  // Adjust size as needed
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 10)
+                         
+            //        }
                 
           
         }
         
-        func formatDate(date: Date) -> String {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM/dd/yyyy"
-            return dateFormatter.string(from: date)
-        }
+//        func formatDate(date: Date) -> String {
+//            let dateFormatter = DateFormatter()
+//            dateFormatter.dateFormat = "MM/dd/yyyy"
+//            return dateFormatter.string(from: date)
+//        }
     }
     
-    struct OptionModal: View {
-        @ObservedObject var viewModel: DropdownViewModel
-          @Binding var isCategoryModalVisible: Bool
+    struct createExpensePaymentTypeModel: View {
+        @EnvironmentObject var dropdownViewModel : DropdownViewModel
+        @EnvironmentObject var expencesVM : ExpenseViewModel
+          @Binding var showPaymentTypeDropdown: Bool
 
         var body: some View {
             
-            GeometryReader { geo in
+            
                 
                 VStack {
-                    ForEach(viewModel.options) { option in
+                    ForEach(dropdownViewModel.PaymentTypeOptions) { option in
                         Button(action: {
-                            viewModel.selectedOption = option
-                            isCategoryModalVisible.toggle()
+                            dropdownViewModel.paymentOption = option
+                            expencesVM.paymentType = option.name
+                            showPaymentTypeDropdown.toggle()
                         }) {
                             Text(option.name)
-                                .frame(width: geo.size.width - 150, height: 40) .font(.system(size: 18)) // Set a custom font size
-                                .foregroundColor(Color.black)
+                                .frame(width : 400,height: 40) .font(.system(size: 18))                                .foregroundColor(Color.black)
                                 .background(Color.white).cornerRadius(10)
                             
                         }
@@ -219,39 +348,141 @@ struct CreateExpenseView: View {
                     Spacer()
                 }
                 
-                .padding().frame(width: geo.size.width * 0.8, height: geo.size.height * 0.6) // Adjust size as needed
+               // Adjust size as needed
                 .background(Color.white)
                 .cornerRadius(10)
                 .shadow(radius: 10)
-                .position(x: geo.size.width / 2, y: geo.size.height / 2)
+         
                 
-            }
+                
+            
         }
     }
     
-    struct IconButton: View {
-        let systemImageName: String
-        let action: () -> Void
-
+    
+    struct createExpenseCategoryModel: View {
+        @EnvironmentObject var dropdownViewModel : DropdownViewModel
+        @EnvironmentObject var expencesVM : ExpenseViewModel
+        @Binding var showCategoryDropdown: Bool
+        
         var body: some View {
-            Button(action: action) {
-                Image(systemName: systemImageName)
-                    .font(.title)
-                    .foregroundColor(.blue)
+            
+            ZStack{
+                
+                Color.white
+                VStack{
+                    
+                    
+                    TextField("Enter new Category", text: $dropdownViewModel.categoryName)
+                        .frame(width: 350, height: 50)
+                        .textFieldStyle(PlainTextFieldStyle())
+                        .padding([.horizontal], 4)
+                        .cornerRadius(16)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                        .padding([.horizontal], 0).background(Color("TextColour")).border(Color("TextColour"))
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    Spacer()
+                    
+                    
+                }.padding().padding(.top,20)
+               
+                
+                
+                VStack{
+                    
+                    ScrollView {
+                        VStack {
+                            ForEach(dropdownViewModel.categoryOptions) { option in
+                                Button(action: {
+                                    dropdownViewModel.categorydOption = option
+                                    expencesVM.category = option.name
+                                    expencesVM.categoryId = option.id.uuidString
+                                    showCategoryDropdown.toggle()
+                                }) {
+                                    Text(option.name)
+                                        .frame(height: 40) .font(.system(size: 18))                                .foregroundColor(Color.black)
+//                                        .background(Color.white)
+                                        .cornerRadius(10)
+
+                                }
+                            
+                            }.border(Color.gray).cornerRadius(10).background(Color.blue)
+                          
+                        }.padding()
+
+                        // Adjust size as needed
+    //                        .background(Color.white)
+                        //                .cornerRadius(10)
+                        //                .shadow(radius: 10)
+
+
+                    }.border(Color.red).padding(10).frame(height: 220).cornerRadius(20)
+                    
+                    Spacer()
+                }.padding(.top,100)
+                
+                
+                
+                Button(action: {
+                    // Action to perform when the button is tapped
+                    expencesVM.addExpences(){
+                        
+                        result in
+                        
+                        switch result {
+                        case .success(_):
+                            
+                            print("suceess")
+                            
+                        case .failure(let error):
+                            expencesVM.errorMessage = error.errorMessage
+                        }
+                        
+                    }
+                }){
+                    Text("Add Category").frame(width: 350)
+                        .font(.headline)
+                        .padding()
+                        .background(Color.orange) // Set the button's background color
+                        .foregroundColor(.white) // Set the text color
+                        .cornerRadius(10).padding(.top,200) // Round the button's corners
+                }
+                
+                if let errorMessage = expencesVM.errorMessage{
+                    Text(errorMessage)
+                }
+                
+                
             }
+            
+            
         }
     }
     
     
     struct CreateExpenseView_Previews: PreviewProvider {
-        //    @StateObject var expencesVM = ExpenseViewModel()
+      
+      
+        
         
         
         static var previews: some View {
-            let expencesViewModel = ExpenseViewModel() // Initialize your ExpenseViewModel
-                let dropdownViewModel = DropdownViewModel() // Initialize your DropdownViewModel
-
-                return CreateExpenseView(expencesVM: expencesViewModel, dropdownView: dropdownViewModel)
+            
+            @ObservedObject var  dropdownViewModel = DropdownViewModel()
+            @ObservedObject var  datePickerViewModel = DatePickerViewModel()
+            @ObservedObject var  expenseViewModel = ExpenseViewModel()
+      
+            
+            
+            CreateExpenseView().environmentObject(dropdownViewModel).environmentObject(datePickerViewModel).environmentObject(expenseViewModel)
         }
     }
 }

@@ -14,49 +14,20 @@ struct TabView: View {
 
     @State var selectTab: Int = 0
     @State private var selectedTab = 0
-    @ObservedObject var expencesVM: ExpenseViewModel
-    @ObservedObject var dropdownView: DropdownViewModel
-    @ObservedObject var datePickerViewModel: DatePickerViewModel
-
-
-    init(expencesVM: ExpenseViewModel, dropdownView: DropdownViewModel,datePickerViewModel : DatePickerViewModel) {
-        self.expencesVM = expencesVM
-                self.dropdownView = dropdownView
-                self.datePickerViewModel = datePickerViewModel
-        }
+  
+    
 
 
 
     var body: some View {
         
         
-        //            if selectTab == 0 {
-        //                         DashboardView(datePickerViewModel: datePickerViewModel)
-        //                             .frame(width: .screenWidth, height: .screenHeight)
-        //                     }
-        //
-        //                     if selectTab == 1 {
-        //                         BudgetView()
-        //                             .frame(width: .screenWidth, height: .screenHeight)
-        //                     }
-        //
-        //                     if selectTab == 2 {
-        //                         CreateExpenseView(expencesVM: expencesVM, dropdownView: dropdownView)
-        //                             .frame(width: .screenWidth, height: .screenHeight)
-        //                     }
+  
         
-        //            if(selectTab == 3) {
-        //
-        //                    .frame(width: .screenWidth, height: .screenHeight)
-        //            }
-        
-        
-        
-        
-        ZStack {
+    ZStack {
             
             if selectTab == 0 {
-                DashboardView(datePickerViewModel: datePickerViewModel)
+                DashboardView()
                     .frame(width: .screenWidth, height: .screenHeight)
             }
             
@@ -66,7 +37,7 @@ struct TabView: View {
             }
             
             if selectTab == 2 {
-                CreateExpenseView(expencesVM: expencesVM, dropdownView: dropdownView)
+                CreateExpenseView()
                     .frame(width: .screenWidth, height: .screenHeight)
             }
             
@@ -80,9 +51,11 @@ struct TabView: View {
                     
                     
                     ZStack(alignment: .center) {
-                        Image("bottom_bar_bg")
-                            .resizable()
-                            .scaledToFit()
+//                        Image("bottom_bar_bg")
+//                            .resizable()
+//                            .scaledToFit()
+                        
+                        Color("tabcolour")
                         
                         HStack(alignment: .center, spacing: 0){
                             
@@ -131,14 +104,14 @@ struct TabView: View {
                                     .resizable()
                                     .frame(width: 20, height: 20)
                                     .padding()
-                            }.border(Color.green)
+                            }
                             .foregroundColor( selectTab == 3 ? .white : .gray30 )
                             Spacer()
                         }
-                    }.border(Color.red,width: 3).frame(height: 200)
+                    }.frame(height: 75).cornerRadius(16)
                     
                     
-                }.border(Color.black)
+                }
             }
             .padding(.horizontal, 20)
             .padding(.bottom , .bottomInsets)
@@ -151,18 +124,17 @@ struct TabView: View {
 
 
 
-       
     }
 }
 
 struct TabView_Previews: PreviewProvider {
     static var previews: some View {
 
-        let expencesViewModel = ExpenseViewModel() // Initialize your ExpenseViewModel
-        let dropdownViewModel = DropdownViewModel()
-        let datePickerViewModel = DatePickerViewModel()// Initialize your DropdownViewModel
+    
+      
+      
 
 
-        return TabView(expencesVM: expencesViewModel, dropdownView: dropdownViewModel,datePickerViewModel:datePickerViewModel)
+        return TabView()
     }
 }
